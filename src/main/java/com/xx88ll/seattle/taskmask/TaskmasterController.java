@@ -29,19 +29,19 @@ public class TaskmasterController {
     //update status of the specific task
     @PostMapping("/tasks/{id}/state")
     public ResponseEntity<Task> updateStatus(@PathVariable String id){
-        Task oneTask =taskmasterRepository.findById(id).get();
-        if(oneTask.getStatus().toLowerCase().equals("available")){
-            oneTask.setStatus("assigned");
-        }else if(oneTask.getStatus().toLowerCase().equals("assigned")){
-            oneTask.setStatus("accepted");
-        }else if(oneTask.getStatus().toLowerCase().equals("accepted")){
-            oneTask.setStatus("finished");
+        Task theTask =taskmasterRepository.findById(id).get();
+        if(theTask.getStatus().toLowerCase().equals("available")){
+            theTask.setStatus("Assigned");
+        }else if(theTask.getStatus().toLowerCase().equals("assigned")){
+            theTask.setStatus("Accepted");
+        }else if(theTask.getStatus().toLowerCase().equals("accepted")){
+            theTask.setStatus("Finished");
         }
         else{
-            oneTask.setStatus("finished");
+            theTask.setStatus("Finished");
         }
-        taskmasterRepository.save(oneTask);
-        return ResponseEntity.ok(oneTask);
+        taskmasterRepository.save(theTask);
+        return ResponseEntity.ok(theTask);
     }
 
 
