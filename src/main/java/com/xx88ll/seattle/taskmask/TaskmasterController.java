@@ -20,7 +20,7 @@ public class TaskmasterController {
     }
 
     @PostMapping("/tasks")
-    public ResponseEntity<String> getTasks(@RequestParam String description,@RequestParam String title, @RequestParam String status){
+    public ResponseEntity<String> addTask(@RequestParam String description,@RequestParam String title, @RequestParam String status){
         Task newTask = new Task(title, description, status);
         taskmasterRepository.save(newTask);
         return ResponseEntity.ok("Done");
