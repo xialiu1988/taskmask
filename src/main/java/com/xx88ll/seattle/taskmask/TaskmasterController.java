@@ -19,22 +19,14 @@ public class TaskmasterController {
         return ResponseEntity.ok(findTask);
     }
 
-    /**
-     * A user should be able to make a POST request to /tasks with body parameters for title and description to add a new task.
-     * All tasks should start with a status of Available.
-     * The response to that request should contain the complete saved data for that task.
-     * A user should be able to make a PUT request to /tasks/{id}/state to advance the status of that task.
-     * Tasks should advance from Available -> Assigned -> Accepted -> Finished.
-     */
-
     @PostMapping("/tasks")
-    public ResponseEntity<String> getTasks(@RequestParam String id, @RequestParam String description,
-                                           @RequestParam String title, @RequestParam String status){
+    public ResponseEntity<String> getTasks(@RequestParam String id, @RequestParam String description,@RequestParam String title, @RequestParam String status){
         Task newTask = new Task(id, title, description, status);
         taskmasterRepository.save(newTask);
         return ResponseEntity.ok("Done");
     }
 
+    //update status of the specific task
     @PostMapping("/tasks/{id}/state")
     public ResponseEntity<Task> updateStatus(@PathVariable String id){
         Task oneTask =taskmasterRepository.findById(id).get();
@@ -43,6 +35,9 @@ public class TaskmasterController {
         }else if(oneTask.getStatus().toLowerCase().equals("assigned")){
             oneTask.setStatus("accepted");
         }else if(oneTask.getStatus().toLowerCase().equals("accepted")){
+            oneTask.setStatus("finished");
+        }
+        else{
             oneTask.setStatus("finished");
         }
         taskmasterRepository.save(oneTask);
