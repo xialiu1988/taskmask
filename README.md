@@ -10,5 +10,11 @@ Model: Task:id;
             
 # routes
 /tasks - >get all tasks 
+
 /tasks(post) ->add new task
+
 /tasks/{id}/state-> change the status of the task
+
+#Deployed link
+
+http://x88l.us-east-2.elasticbeanstalk.com/tasks

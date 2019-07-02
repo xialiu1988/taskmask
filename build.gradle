@@ -9,12 +9,6 @@ group = 'com.xx88ll.2019seattle'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
 
-configurations {
-	developmentOnly
-	runtimeClasspath {
-		extendsFrom developmentOnly
-	}
-}
 
 repositories {
 	mavenCentral()
@@ -22,12 +16,8 @@ repositories {
 
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.cloud:spring-cloud-starter-aws'
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-
 	compile 'com.github.derjust:spring-data-dynamodb:5.0.4'
 	compile 'com.amazonaws:aws-java-sdk-dynamodb:1.11.95'
 }
