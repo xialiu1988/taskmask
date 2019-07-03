@@ -8,5 +8,5 @@ import java.util.List;
 @EnableScan
 public interface TaskmasterRepository extends CrudRepository<Task, String> {
 
-        Iterable<Task> findAllByassigneeid(String assigneeid);
+        Iterable<Task> findAllByassignee(Assignee assignee);
 }

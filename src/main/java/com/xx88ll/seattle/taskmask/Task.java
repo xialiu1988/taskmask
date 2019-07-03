@@ -11,7 +11,8 @@ public class Task {
     String title;
     String description;
     String status;
-    String assigneeid;
+    @DynamoDBAttribute(attributeName="Assignee")
+    Assignee assignee;
     public Task(){}
 
     public Task(String title, String description, String status) {
@@ -20,12 +21,12 @@ public class Task {
         this.status = status;
     }
 
+    public Assignee getAssignee(){return this.assignee;}
+    public void setAssignee(Assignee assignee){this.assignee=assignee;}
     public String getId() { return id; }
 
     @DynamoDBAttribute
     public String getTitle() { return title; }
-    @DynamoDBAttribute
-    public  String getAssigneeid(){return assigneeid;};
     @DynamoDBAttribute
     public String getStatus() { return status; }
 
@@ -33,7 +34,6 @@ public class Task {
     public String getDescription() { return description; }
 
     public void setId(String id){ this.id = id; }
-    public void setAssigneeid(String assigneeid){this.assigneeid=assigneeid;}
     public void setTitle(String title) { this.title = title; }
     public void setDescription(String description) { this.description = description; }
     public void setStatus(String status) { this.status = status; }
