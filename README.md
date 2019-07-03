@@ -17,6 +17,9 @@ Model: Task:id;
 
 /tasks/{id}/state-> change the status of the task
 
+/users/{name}/tasks -> get all the tasks assigned to the user
+
+/tasks/{id}/assign/{assignee}->assigned the task to certain user and change the task status
 
 #Deployed link
 
