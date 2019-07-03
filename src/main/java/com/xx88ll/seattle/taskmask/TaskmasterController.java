@@ -63,10 +63,31 @@ public class TaskmasterController {
          System.out.println(theAssignee.getName());
           String id = theAssignee.getId();
           Iterable<Task> lists=taskmasterRepository.findAllByassigneeid(id);
-          System.out.println(lists);
         return ResponseEntity.ok(lists);
 
     }
 
+
+    @PutMapping("/tasks/{id}/assign/{assignee}")
+    public ResponseEntity<Task> updateAssigneetoTask(@PathVariable String id,@PathVariable String assignee){
+        Task theTask = taskmasterRepository.findById(id).get();
+        if(!assignee.isEmpty()){
+
+           if(assigneeRepository.findByName(assignee)!=null){
+               Assignee theAssignee=assigneeRepository.findByName(assignee);
+               theTask.setAssigneeid(theAssignee.getId());
+           }
+            else{
+                assigneeRepository.save(new Assignee(assignee));
+                Assignee theOne = assigneeRepository.findByName(assignee);
+                theTask.setAssigneeid(theOne.getId());
+           }
+
+            theTask.setStatus("Assigned");
+            taskmasterRepository.save(theTask);
+        }
+
+        return ResponseEntity.ok(theTask);
+    }
 
 }
