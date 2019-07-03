@@ -1,10 +1,14 @@
 package com.xx88ll.seattle.taskmask;
 
+
+import com.amazonaws.services.dynamodbv2.xspec.S;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @Controller
@@ -12,6 +16,8 @@ public class TaskmasterController {
 
     @Autowired
     TaskmasterRepository taskmasterRepository;
+    @Autowired
+    AssigneeRepository assigneeRepository;
 
     @GetMapping("/tasks")
     public ResponseEntity<Iterable<Task>> getTasks(Model m){
@@ -20,8 +26,14 @@ public class TaskmasterController {
     }
 
     @PostMapping("/tasks")
-    public ResponseEntity<String> addTask(@RequestParam String description,@RequestParam String title, @RequestParam String status){
+    public ResponseEntity<String> addTask(@RequestParam String description,@RequestParam String title, @RequestParam String status,@RequestParam String name){
         Task newTask = new Task(title, description, status);
+        if(!name.isEmpty()) {
+            System.out.println("runnning");
+            Assignee theAssignee=assigneeRepository.findByName(name);
+            System.out.println(theAssignee.getName());
+            newTask.setAssigneeid(theAssignee.getId());
+        }
         taskmasterRepository.save(newTask);
         return ResponseEntity.ok("Done");
     }
@@ -44,6 +56,17 @@ public class TaskmasterController {
         return ResponseEntity.ok(theTask);
     }
 
+
+    @GetMapping("/users/{name}/tasks")
+    public ResponseEntity<Iterable<Task>>getTheUserTasks(@PathVariable String name){
+          Assignee theAssignee=assigneeRepository.findByName(name);
+         System.out.println(theAssignee.getName());
+          String id = theAssignee.getId();
+          Iterable<Task> lists=taskmasterRepository.findAllByassigneeid(id);
+          System.out.println(lists);
+        return ResponseEntity.ok(lists);
+
+    }
 
 
 }
