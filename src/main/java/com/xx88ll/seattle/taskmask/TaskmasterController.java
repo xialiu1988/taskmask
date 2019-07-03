@@ -30,9 +30,18 @@ public class TaskmasterController {
         Task newTask = new Task(title, description, status);
         if(!name.isEmpty()) {
             System.out.println("runnning");
-            Assignee theAssignee=assigneeRepository.findByName(name);
-            System.out.println(theAssignee.getName());
-            newTask.setAssigneeid(theAssignee.getId());
+
+            if(assigneeRepository.findByName(name)!=null){
+                Assignee theAssignee=assigneeRepository.findByName(name);
+                System.out.println(theAssignee.getName());
+                newTask.setAssigneeid(theAssignee.getId());
+            }
+            else{
+                assigneeRepository.save(new Assignee(name));
+                Assignee theOne = assigneeRepository.findByName(name);
+                newTask.setAssigneeid(theOne.getId());
+            }
+
         }
         taskmasterRepository.save(newTask);
         return ResponseEntity.ok("Done");
