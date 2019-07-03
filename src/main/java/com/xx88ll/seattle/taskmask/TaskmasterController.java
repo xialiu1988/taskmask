@@ -34,12 +34,12 @@ public class TaskmasterController {
             if(assigneeRepository.findByName(name)!=null){
                 Assignee theAssignee=assigneeRepository.findByName(name);
                 System.out.println(theAssignee.getName());
-                newTask.setAssigneeid(theAssignee.getId());
+                newTask.setAssignee(theAssignee);
             }
             else{
                 assigneeRepository.save(new Assignee(name));
                 Assignee theOne = assigneeRepository.findByName(name);
-                newTask.setAssigneeid(theOne.getId());
+                newTask.setAssignee(theOne);
             }
 
         }
@@ -70,8 +70,7 @@ public class TaskmasterController {
     public ResponseEntity<Iterable<Task>>getTheUserTasks(@PathVariable String name){
           Assignee theAssignee=assigneeRepository.findByName(name);
          System.out.println(theAssignee.getName());
-          String id = theAssignee.getId();
-          Iterable<Task> lists=taskmasterRepository.findAllByassigneeid(id);
+          Iterable<Task> lists=taskmasterRepository.findAllByassignee(theAssignee);
         return ResponseEntity.ok(lists);
 
     }
@@ -84,12 +83,12 @@ public class TaskmasterController {
 
            if(assigneeRepository.findByName(assignee)!=null){
                Assignee theAssignee=assigneeRepository.findByName(assignee);
-               theTask.setAssigneeid(theAssignee.getId());
+               theTask.setAssignee(theAssignee);
            }
             else{
                 assigneeRepository.save(new Assignee(assignee));
                 Assignee theOne = assigneeRepository.findByName(assignee);
-                theTask.setAssigneeid(theOne.getId());
+                theTask.setAssignee(theOne);
            }
 
             theTask.setStatus("Assigned");
