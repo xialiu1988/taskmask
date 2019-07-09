@@ -7,12 +7,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 
 @Controller
 public class TaskmasterController {
+    @Autowired
+    S3Client s3Client;
 
     @Autowired
     TaskmasterRepository taskmasterRepository;
@@ -97,5 +100,32 @@ public class TaskmasterController {
 
         return ResponseEntity.ok(theTask);
     }
+
+
+
+    @GetMapping("/tasks/{id}")
+    public ResponseEntity<Task> getOnetask(@PathVariable String id){
+
+        Task tt = taskmasterRepository.findById(id).get();
+        return ResponseEntity.ok(tt);
+    }
+
+
+
+
+    @PostMapping("/tasks/{id}/images")
+    public ResponseEntity<Task> uploadFile(@PathVariable String id,
+            @RequestPart(value = "file") MultipartFile file
+    ){
+
+        String pic = this.s3Client.uploadFile(file);
+        Task tt = taskmasterRepository.findById(id).get();
+        tt.setImageUrl(pic);
+        taskmasterRepository.save(tt);
+        return ResponseEntity.ok(tt);
+
+    }
+
+
 
 }
