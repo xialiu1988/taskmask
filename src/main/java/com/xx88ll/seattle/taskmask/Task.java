@@ -13,6 +13,9 @@ public class Task {
     String status;
     @DynamoDBAttribute(attributeName="Assignee")
     Assignee assignee;
+
+    @DynamoDBAttribute
+    String imageUrl;
     public Task(){}
 
     public Task(String title, String description, String status) {
@@ -20,7 +23,12 @@ public class Task {
         this.description = description;
         this.status = status;
     }
-
+    public String getImageUrl(){
+        return this.imageUrl;
+    }
+    public void setImageUrl(String url){
+        this.imageUrl=url;
+    }
     public Assignee getAssignee(){return this.assignee;}
     public void setAssignee(Assignee assignee){this.assignee=assignee;}
     public String getId() { return id; }
