@@ -102,7 +102,7 @@ public class TaskmasterController {
     }
 
 
-
+    @CrossOrigin
     @GetMapping("/tasks/{id}")
     public ResponseEntity<Task> getOnetask(@PathVariable String id){
 
@@ -112,7 +112,7 @@ public class TaskmasterController {
 
 
 
-
+    @CrossOrigin
     @PostMapping("/tasks/{id}/images")
     public ResponseEntity<Task> uploadFile(@PathVariable String id,
             @RequestPart(value = "file") MultipartFile file
