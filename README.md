@@ -24,3 +24,6 @@ Model: Task:id;
 #Deployed link
 
 http://x88l.us-east-2.elasticbeanstalk.com/tasks
+
+#issue
+S3 bucket needs to have full access by the user. Otherwise it will not upload to the bucket.
