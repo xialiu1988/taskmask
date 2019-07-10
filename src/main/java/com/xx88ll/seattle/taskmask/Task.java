@@ -16,6 +16,10 @@ public class Task {
 
     @DynamoDBAttribute
     String imageUrl;
+
+    @DynamoDBAttribute
+    String thumbnailUrl;
+
     public Task(){}
 
     public Task(String title, String description, String status) {
@@ -23,6 +27,8 @@ public class Task {
         this.description = description;
         this.status = status;
     }
+    public String getThumbnailUrl(){return this.thumbnailUrl;}
+    public void setThumbnailUrl(String thumbnailUrl){this.thumbnailUrl=thumbnailUrl;}
     public String getImageUrl(){
         return this.imageUrl;
     }

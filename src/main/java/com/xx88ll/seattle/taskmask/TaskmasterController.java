@@ -1,14 +1,24 @@
 package com.xx88ll.seattle.taskmask;
 
 
+import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.services.dynamodbv2.xspec.S;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.amazonaws.services.s3.model.GetObjectRequest;
+import com.amazonaws.services.s3.model.S3Object;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.List;
 
 
@@ -111,7 +121,6 @@ public class TaskmasterController {
     }
 
 
-
     @CrossOrigin
     @PostMapping("/tasks/{id}/images")
     public ResponseEntity<Task> uploadFile(@PathVariable String id,
@@ -121,11 +130,14 @@ public class TaskmasterController {
         String pic = this.s3Client.uploadFile(file);
         Task tt = taskmasterRepository.findById(id).get();
         tt.setImageUrl(pic);
+
+        String[] picSplit = pic.split("/");
+        String fileName = picSplit[picSplit.length-1];
+        tt.setThumbnailUrl("https://taskmasterimageresized.s3-us-west-2.amazonaws.com/resized-" + fileName);
         taskmasterRepository.save(tt);
         return ResponseEntity.ok(tt);
 
     }
-
 
 
 }
