@@ -1,12 +1,19 @@
 package com.xx88ll.seattle.taskmask;
 
 
+import com.amazonaws.auth.InstanceProfileCredentialsProvider;
 import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.services.dynamodbv2.xspec.S;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.S3Object;
+import com.amazonaws.services.sns.AmazonSNS;
+import com.amazonaws.services.sns.AmazonSNSClient;
+import com.amazonaws.services.sns.AmazonSNSClientBuilder;
+import com.amazonaws.services.sns.model.MessageAttributeValue;
+import com.amazonaws.services.sns.model.PublishRequest;
+import com.amazonaws.services.sns.model.PublishResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -19,11 +26,15 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Controller
 public class TaskmasterController {
+
+
     @Autowired
     S3Client s3Client;
 
@@ -70,6 +81,14 @@ public class TaskmasterController {
             theTask.setStatus("Accepted");
         }else if(theTask.getStatus().toLowerCase().equals("accepted")){
             theTask.setStatus("Finished");
+            // Publish a message to an Amazon SNS topic.
+           String msg = "You received this because Task is finished--from AWS .";
+            AmazonSNSClient snsClient = new AmazonSNSClient();
+            String phoneNumber = "+13528701223";
+            Map<String, MessageAttributeValue> smsAttributes =
+                    new HashMap<>();
+
+            sendMessage(snsClient, msg, phoneNumber, smsAttributes);
         }
         else{
             theTask.setStatus("Finished");
@@ -77,6 +96,20 @@ public class TaskmasterController {
         taskmasterRepository.save(theTask);
         return ResponseEntity.ok(theTask);
     }
+
+
+
+    public static void sendMessage(AmazonSNSClient snsClient, String message,
+                                      String phoneNumber, Map<String, MessageAttributeValue> smsAttributes) {
+        PublishResult result = snsClient.publish(new PublishRequest()
+                .withMessage(message)
+                .withPhoneNumber(phoneNumber)
+                .withMessageAttributes(smsAttributes));
+        System.out.println(result);
+    }
+
+
+
 
 
     @GetMapping("/users/{name}/tasks")
